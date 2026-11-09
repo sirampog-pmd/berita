@@ -9,7 +9,6 @@
   <link rel="shortcut icon" type="image/png" href="favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -278,9 +277,9 @@
           </div>
         </div>
         <div class="hero-art" aria-hidden="true">
-          <div class="art-card one"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=500&q=80" alt=""></div>
-          <div class="art-card two"><img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=500&q=80" alt=""></div>
-          <div class="art-card three"><img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80" alt=""></div>
+          <div class="art-card one"><img src="home1.jpg" alt=""></div>
+          <div class="art-card two"><img src="home.jpg" alt=""></div>
+          <div class="art-card three"><img src="home2.jpg" alt=""></div>
         </div>
         <div class="hero-stamp">DESA TUMBUH BERSAMA</div>
       </div>
@@ -304,15 +303,15 @@
       </div>
       <article class="featured" id="featuredCard">
         <div class="featured-image">
-          <img id="featuredImage" src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1100&q=85" alt="Kegiatan koordinasi pembinaan desa">
+          <img id="featuredImage" src="home.jpg" alt="Kegiatan koordinasi pembinaan desa">
           <span class="featured-tag">Kegiatan pilihan</span>
         </div>
         <div class="featured-copy">
-          <div class="meta"><span id="featuredDate">◷ 12 Oktober 2026</span><span id="featuredVillage">⌂ Desa Sukamaju</span></div>
-          <h3 id="featuredTitle">Penguatan Tata Kelola Pemerintahan Desa melalui Pembinaan Administrasi</h3>
-          <p id="featuredDesc">Pendampingan dan pembinaan administrasi menjadi langkah penting untuk mewujudkan tata kelola pemerintahan desa yang tertib, transparan, dan akuntabel.</p>
-          <button class="text-link" id="featuredRead">Baca cerita kegiatan <span>→</span></button>
-        </div>
+		  <div class="meta"><span id="featuredDate"></span><span id="featuredVillage"></span></div>
+		  <h3 id="featuredTitle">Memuat data...</h3>
+		  <p id="featuredDesc"></p>
+		  <button class="text-link" id="featuredRead">Baca cerita kegiatan <span>→</span></button>
+		</div>
       </article>
     </section>
 
@@ -364,7 +363,7 @@
     <div class="modal">
       <div class="modal-head"><h3 id="formTitle">Tambah Berita Kegiatan</h3><button class="close-btn" data-close="formModal" aria-label="Tutup">×</button></div>
       <form class="form-body" id="newsForm">
-        <div class="notice"><strong>Catatan:</strong> Data berita dan foto tersimpan di Google Sheets & Google Drive. Login dengan akun Google diperlukan untuk menambah/menghapus berita.</div>
+        <div class="notice"><strong>Catatan:</strong> Data berita dan foto tersimpan di Google Sheets & Google Drive. Login Admin diperlukan untuk menambah/menghapus berita.</div>
 		
         <input type="hidden" id="editId">
         <div class="form-grid">
@@ -381,7 +380,6 @@
             </select>
           </div>
           <div class="field"><label for="newsSummary">Ringkasan singkat *</label><input id="newsSummary" required maxlength="220" placeholder="Ringkasan singkat kegiatan..."></div>
-          <div class="field full"><label for="newsContent">Isi berita / uraian kegiatan *</label><textarea id="newsContent" required placeholder="Tuliskan tujuan, proses, peserta, hasil, dan tindak lanjut kegiatan..."></textarea></div>
           <div class="field full">
             <label for="newsPhoto">Foto dokumentasi</label>
             <div class="upload-box">
@@ -390,6 +388,15 @@
               <small>Unggah foto JPG, PNG, atau WEBP. Foto akan diperkecil otomatis agar lebih ringan.</small>
               <img class="preview-img" id="photoPreview" alt="Pratinjau foto">
             </div>
+          </div>
+		  <div class="field full">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+              <label for="newsContent" style="margin:0;">Isi berita / uraian kegiatan *</label>
+              <button type="button" class="btn btn-outline" id="generateAiBtn" style="padding:6px 12px; font-size:11px; border-color:var(--teal); color:var(--teal);">
+                ✨ Buat dengan AI
+              </button>
+            </div>
+            <textarea id="newsContent" required placeholder="Tuliskan tujuan, proses, peserta, hasil, dan tindak lanjut kegiatan..."></textarea>
           </div>
         </div>
         <div class="form-actions"><button type="button" class="btn btn-outline" data-close="formModal">Batal</button><button type="submit" class="btn btn-primary" id="saveNewsBtn">Simpan Berita</button></div>
@@ -442,10 +449,9 @@
 </div>
 
 
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
   // ============ KONFIGURASI — WAJIB DIISI ============
-  const API_URL = 'https://script.google.com/macros/s/AKfycbzErap6N_GyzsO9Ie3Sph-p_olqDiXSQqTvLv4ekJBlKFecVOZCet4a9js9l9nMXxRiUA/exec'; // URL Web App dari Apps Script
+  const API_URL = 'https://script.google.com/macros/s/AKfycbxlQEZaxArrFjUf8xtIhgVJIfUslXSRQDSkzL2Z0gUtTmquWQyFAYQftM8uPOHt2nb5/exec'; 
 
   const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=900&q=80";
 
@@ -454,13 +460,30 @@
   let activeFilter = "Semua";
   let activeArticleId = null;
   let selectedPhotoData = null;
-  let currentUser = null;
 
   // ============ UTILITAS ============
   const fmtDate = value => {
     if (!value) return "Tanggal belum diatur";
-    return new Intl.DateTimeFormat("id-ID", { day:"numeric", month:"long", year:"numeric" })
-      .format(new Date(value + "T00:00:00"));
+    
+    try {
+      // Jika data dari Google Sheets berupa string tanggal (misal: "2026-10-12")
+      // Kita pastikan formatnya bisa dibaca oleh Javascript
+      let dateObj = new Date(value);
+      
+      // Jika javascript gagal membaca, coba ganti pemisahnya
+      if (isNaN(dateObj.getTime())) {
+        dateObj = new Date(String(value).replace(/\//g, '-'));
+      }
+
+      // Jika tetap gagal, kembalikan teks aslinya atau pesan error
+      if (isNaN(dateObj.getTime())) {
+        return String(value); 
+      }
+
+      return new Intl.DateTimeFormat("id-ID", { day:"numeric", month:"long", year:"numeric" }).format(dateObj);
+    } catch (e) {
+      return "Format tanggal salah";
+    }
   };
   const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, ch => ({ 
     "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" 
@@ -543,21 +566,40 @@
 	}
 
   // ============ API CALLS ============
-  async function loadArticles() {
-    try {
-      document.getElementById('galleryGrid').innerHTML = '<div class="empty-state"><strong>Memuat data...</strong></div>';
-      const res = await fetch(API_URL + '?t=' + Date.now());
-      const data = await res.json();
-      if (data.status === 'error') throw new Error(data.message);
-      articles = Array.isArray(data) ? data : [];
-      refresh();
-    } catch (err) {
-      console.error(err);
-      document.getElementById('galleryGrid').innerHTML =
-        '<div class="empty-state"><strong>Gagal memuat data.</strong>Periksa koneksi internet dan konfigurasi API.</div>';
-      toast('Gagal memuat data dari server.');
-    }
-  }
+    async function loadArticles() {
+		try {
+		  document.getElementById('galleryGrid').innerHTML = '<div class="empty-state"><strong>Memuat data...</strong></div>';
+		  
+		  // Tambahkan mode 'cors' dan coba tangkap jika ada masalah jaringan
+		  const res = await fetch(API_URL + '?t=' + Date.now(), {
+			method: 'GET',
+			mode: 'cors'
+		  });
+		  
+		  if (!res.ok) throw new Error("Jaringan bermasalah atau API tidak merespons.");
+		  
+		  const data = await res.json();
+		  
+		  // Cek jika backend mengembalikan pesan error
+		  if (data.status === 'error') {
+			throw new Error(data.message);
+		  }
+		  
+		  // Pastikan data adalah Array. Jika bukan, jadikan array kosong.
+		  articles = Array.isArray(data) ? data : [];
+		  
+		  refresh();
+		} catch (err) {
+		  console.error("Error Load Data:", err);
+		  document.getElementById('galleryGrid').innerHTML =
+			`<div class="empty-state">
+			   <strong>Gagal memuat data.</strong>
+			   <p style="font-size:12px; margin-top:5px;">Pesan sistem: ${err.message}</p>
+			   <p style="font-size:11px; color:#999; margin-top:10px;">Pastikan Web App sudah di-deploy dengan akses "Anyone", dan ID Spreadsheet sudah benar.</p>
+			 </div>`;
+		  toast('Gagal memuat data: ' + err.message);
+		}
+	}
 
 	async function saveArticle(articleData) {
 	  const payload = { ...articleData, token: getToken() };
@@ -585,7 +627,7 @@
     const item = articles.slice().sort((a,b) => (b.date||'').localeCompare(a.date||''))[0];
     if (!item) return;
     document.getElementById("featuredImage").src = item.image || FALLBACK_IMAGE;
-    document.getElementById("featuredDate").textContent = "◷ " + fmtDate(item.date);
+    document.getElementById("featuredDate").textContent = "◷ " + fmtDate(item.date || new Date().toISOString());
     document.getElementById("featuredVillage").textContent = "⌂ " + item.village;
     document.getElementById("featuredTitle").textContent = item.title;
     document.getElementById("featuredDesc").textContent = item.summary;
@@ -643,32 +685,42 @@
   }
 
   // ============ FORM & UPLOAD ============
-  function openForm(article = null) {
+    function openForm(article = null) {
     if (!isLoggedIn()) {
-		toast("Silakan login terlebih dahulu untuk menambah berita.");
-		openModal('loginModal');   // ← tambahkan ini
-		return;
-	}
-    selectedPhotoData = null;
+      toast("Silakan login terlebih dahulu untuk menambah berita.");
+      openModal('loginModal');
+      return;
+    }
+    
+    // Reset form dan state
     document.getElementById("newsForm").reset();
+    document.getElementById("newsPhoto").value = ""; // Bersihkan input file
+    selectedPhotoData = null;
+    document.getElementById("photoPreview").style.display = "none";
+    document.getElementById("photoPreview").removeAttribute("src");
+
     document.getElementById("editId").value = article?.id || "";
     document.getElementById("formTitle").textContent = article ? "Edit Berita Kegiatan" : "Tambah Berita Kegiatan";
     document.getElementById("saveNewsBtn").textContent = article ? "Simpan Perubahan" : "Simpan Berita";
     document.getElementById("newsDate").value = article?.date || new Date().toISOString().slice(0,10);
+    
     if (article) {
       document.getElementById("newsTitle").value = article.title;
       document.getElementById("newsVillage").value = article.village;
       document.getElementById("newsCategory").value = article.category;
       document.getElementById("newsSummary").value = article.summary;
       document.getElementById("newsContent").value = article.content;
-      if (article.image) {
+      
+      // Jika artikel punya gambar dari server, tampilkan preview
+      if (article.image && !article.image.includes('unsplash')) { 
+        // (Opsional: cek jika gambar bukan fallback)
         const preview = document.getElementById("photoPreview");
-        preview.src = article.image; preview.style.display = "block";
+        preview.src = article.image; 
+        preview.style.display = "block";
+        selectedPhotoData = article.image; // Simpan untuk edit
       }
-    } else {
-      document.getElementById("photoPreview").style.display = "none";
-      document.getElementById("photoPreview").removeAttribute("src");
     }
+    
     closeModal("detailModal");
     openModal("formModal");
   }
@@ -790,6 +842,74 @@
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.toggle("active", b === btn));
     renderGallery();
   });
+  
+    // Tambahkan ini di bagian EVENT BINDING
+	document.getElementById("featuredRead").addEventListener("click", () => {
+	  // Jika data dari server sudah ada, buka detailnya
+	  if (articles.length > 0) {
+		// Ambil ID dari artikel pertama (terbaru)
+		const latestArticle = articles.slice().sort((a,b) => (b.date||'').localeCompare(a.date||''))[0];
+		showDetail(latestArticle.id);
+	  } else {
+		// Jika data kosong/gagal dimuat, beri tahu pengguna
+		toast("Data belum termuat dari server. Silakan cek koneksi atau konfigurasi API.");
+	  }
+	});
+
+  // ============ AI GENERATOR ============
+  document.getElementById("generateAiBtn").addEventListener("click", async () => {
+    const category = document.getElementById("newsCategory").value;
+    const summary = document.getElementById("newsSummary").value.trim();
+    const contentArea = document.getElementById("newsContent");
+    const btn = document.getElementById("generateAiBtn");
+
+    // Validasi
+    if (!summary) {
+      toast("Harap isi 'Ringkasan singkat' terlebih dahulu agar AI tahu konteksnya.");
+      document.getElementById("newsSummary").focus();
+      return;
+    }
+
+    // Ubah tampilan tombol
+    const originalText = btn.innerHTML;
+    btn.innerHTML = "⏳ Menyusun...";
+    btn.disabled = true;
+    contentArea.value = "Sedang menyusun berita dengan AI...";
+    contentArea.disabled = true;
+
+    try {
+      const payload = {
+        action: 'generate_ai',
+        category: category,
+        summary: summary,
+        imageBase64: selectedPhotoData || '',
+		token: getToken()
+      };
+
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+      });
+      
+      const result = await res.json();
+      
+      if (result.status === 'success') {
+        contentArea.value = result.text.trim();
+        toast("Berita berhasil disusun oleh AI!");
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (err) {
+      contentArea.value = ""; // Kosongkan jika gagal
+      toast("Gagal menyusun AI: " + err.message);
+    } finally {
+      // Kembalikan tombol ke semula
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      contentArea.disabled = false;
+    }
+  });
 
   // ============ INIT ============
   function init() {
@@ -801,7 +921,9 @@
 	}
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
+    
 </script>
 
 </body>
 </html>
+
