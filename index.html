@@ -240,6 +240,9 @@
       .detail-content { padding:22px; }
       .detail-content h2 { font-size:22px; }
     }
+	[hidden] {
+	  display: none !important;
+	}
   </style>
 </head>
 <body>
@@ -283,7 +286,7 @@
         </div>
         <div class="hero-stamp">DESA TUMBUH BERSAMA</div>
       </div>
-      <div class="demo-note">* Tampilan awal berisi data contoh. Silakan ganti dengan dokumentasi kegiatan dan foto Kecamatan Sirampog.</div>
+      <div class="demo-note">* Tampilan awal berisi data contoh. Silakan ganti dengan dokumentasi kegiatan dan foto asli Kecamatan Sirampog.</div>
     </section>
 
     <section class="container stats" aria-label="Statistik kegiatan">
@@ -318,7 +321,7 @@
     <section class="container gallery-section" id="galeri">
       <div class="section-head">
         <div>
-          <div class="section-kicker">Arsip aktivitas kecamatan Sirampog</div>
+          <div class="section-kicker">Arsip aktivitas Kecamatan Sirampog</div>
           <h2>Galeri Berita Kegiatan</h2>
           <p class="section-desc">Temukan dokumentasi pembinaan, pendampingan, dan pemberdayaan desa.</p>
         </div>
@@ -326,11 +329,14 @@
       <div class="toolbar">
         <div class="filters" id="filterList">
           <button class="filter-btn active" data-filter="Semua">Semua</button>
-          <button class="filter-btn" data-filter="Pembinaan Desa">Pembinaan Desa</button>
           <button class="filter-btn" data-filter="Administrasi">Administrasi</button>
+		  <button class="filter-btn" data-filter="Pemerintahan">Pemerintahan</button>
+		  <button class="filter-btn" data-filter="Pembinaan Desa">Pembinaan Desa</button>
           <button class="filter-btn" data-filter="Pemberdayaan">Pemberdayaan</button>
-          <button class="filter-btn" data-filter="Kelembagaan">Kelembagaan</button>
-          <button class="filter-btn" data-filter="Perlindungan & Sosial">Perlindungan & Sosial</button>
+          <button class="filter-btn" data-filter="Monev">Monitoring & Evaluasi</button>
+		  <button class="filter-btn" data-filter="Infrastruktur">Infrastruktur</button>
+		  <button class="filter-btn" data-filter="Ketentraman dan Ketertiban">Trantib</button>
+          <button class="filter-btn" data-filter="Kesejahteraan Sosial">Kesos</button>
         </div>
         <label class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Cari kegiatan atau nama desa..." aria-label="Cari berita"></label>
       </div>
@@ -372,14 +378,18 @@
           <div class="field"><label for="newsDate">Tanggal kegiatan *</label><input id="newsDate" type="date" required></div>
           <div class="field"><label for="newsCategory">Kategori kegiatan *</label>
             <select id="newsCategory" required>
-              <option value="Pembinaan Desa">Pembinaan Desa</option>
               <option value="Administrasi">Administrasi</option>
+			  <option value="Pemerintahan">Pemerintahan</option>
+			  <option value="Pembinaan Desa">Pembinaan Desa</option>
               <option value="Pemberdayaan">Pemberdayaan</option>
-              <option value="Kelembagaan">Kelembagaan</option>
-              <option value="Perlindungan & Sosial">Perlindungan & Sosial</option>
+              <option value="Monev">Monitoring & Evaluasi</option>
+			  <option value="Infrastruktur">Infrastruktur</option>
+			  <option value="Ketentraman dan Ketertiban">Ketentraman dan Ketertiban</option>
+              <option value="Kesejahteraan Sosial">Kesejahteraan Sosial</option>
+			  
             </select>
           </div>
-          <div class="field"><label for="newsSummary">Ringkasan singkat *</label><input id="newsSummary" required maxlength="220" placeholder="Ringkasan singkat kegiatan..."></div>
+          <div class="field"><label for="newsSummary">Ringkasan singkat *</label><input id="newsSummary" required maxlength="300" placeholder="Ringkasan singkat kegiatan..."></div>
           <div class="field full">
             <label for="newsPhoto">Foto dokumentasi</label>
             <div class="upload-box">
@@ -414,8 +424,8 @@
         <h2 id="detailTitle"></h2>
         <p id="detailText"></p>
         <div class="detail-actions">
-          <button class="btn btn-outline" id="editArticleBtn">✎ Edit berita</button>
-          <button class="btn btn-danger" id="deleteArticleBtn">Hapus berita</button>
+          <button class="btn btn-outline" id="editArticleBtn" hidden>✎ Edit berita</button>
+          <button class="btn btn-danger" id="deleteArticleBtn" hidden>Hapus berita</button>
           <button class="btn btn-outline" id="closeDetailBtn">Tutup</button>
         </div>
       </div>
@@ -510,6 +520,7 @@
 	function updateAuthUI() {
 	  const trigger = document.getElementById('loginTrigger');
 	  if (!trigger) return;
+
 	  if (isLoggedIn()) {
 		trigger.className = 'btn btn-outline';
 		trigger.innerHTML = `👤 ${escapeHTML(getUsername())} · Logout`;
@@ -519,6 +530,12 @@
 		trigger.textContent = 'Login';
 		trigger.onclick = () => openModal('loginModal');
 	  }
+
+	  // Tampilkan / sembunyikan tombol edit & hapus
+	  const editBtn = document.getElementById('editArticleBtn');
+	  const deleteBtn = document.getElementById('deleteArticleBtn');
+	  if (editBtn) editBtn.hidden = !isLoggedIn();
+	  if (deleteBtn) deleteBtn.hidden = !isLoggedIn();
 	}
 
 	async function handleLogin(e) {
@@ -672,17 +689,22 @@
   function refresh() { renderStats(); renderFeatured(); renderGallery(); }
 
   function showDetail(id) {
-    const item = articles.find(a => a.id === id);
-    if (!item) return;
-    activeArticleId = id;
-    document.getElementById("detailImage").src = item.image || FALLBACK_IMAGE;
-    document.getElementById("detailDate").textContent = "◷ " + fmtDate(item.date);
-    document.getElementById("detailVillage").textContent = "⌂ " + item.village;
-    document.getElementById("detailCategory").textContent = "✳ " + item.category;
-    document.getElementById("detailTitle").textContent = item.title;
-    document.getElementById("detailText").textContent = item.content;
-    openModal("detailModal");
-  }
+	  const item = articles.find(a => a.id === id);
+	  if (!item) return;
+	  activeArticleId = id;
+	  document.getElementById("detailImage").src = item.image || FALLBACK_IMAGE;
+	  document.getElementById("detailDate").textContent = "◷ " + fmtDate(item.date);
+	  document.getElementById("detailVillage").textContent = "⌂ " + item.village;
+	  document.getElementById("detailCategory").textContent = "✳ " + item.category;
+	  document.getElementById("detailTitle").textContent = item.title;
+	  document.getElementById("detailText").textContent = item.content;
+
+	  // Sinkronkan visibilitas tombol admin
+	  document.getElementById('editArticleBtn').hidden = !isLoggedIn();
+	  document.getElementById('deleteArticleBtn').hidden = !isLoggedIn();
+
+	  openModal("detailModal");
+	}
 
   // ============ FORM & UPLOAD ============
     function openForm(article = null) {
@@ -717,8 +739,9 @@
         const preview = document.getElementById("photoPreview");
         preview.src = article.image; 
         preview.style.display = "block";
-        selectedPhotoData = article.image; // Simpan untuk edit
+        selectedPhotoData = null; 
       }
+	  
     }
     
     closeModal("detailModal");
@@ -763,10 +786,12 @@
     if (!isLoggedIn()) { toast("Silakan login terlebih dahulu."); return; }
 
     const editId = document.getElementById("editId").value;
-    if (editId) { toast("Fitur edit belum tersedia di versi ini."); return; } // edit belum diimplementasi di backend
+    
+    const actionType = editId ? 'update' : 'create';
 
     const article = {
-      action: 'create',
+      action: actionType, 
+      id: editId,         
       title: document.getElementById("newsTitle").value.trim(),
       village: document.getElementById("newsVillage").value.trim(),
       date: document.getElementById("newsDate").value,
@@ -788,9 +813,10 @@
     try {
       const result = await saveArticle(article);
       if (result.status !== 'success') throw new Error(result.message || 'Gagal menyimpan');
+      
       closeModal("formModal");
-      toast("Berita berhasil ditambahkan.");
-      await loadArticles();
+      toast(editId ? "Berita berhasil diperbarui." : "Berita berhasil ditambahkan.");
+      await loadArticles(); 
     } catch (err) {
       console.error(err);
       toast("Gagal menyimpan: " + err.message);
@@ -926,4 +952,3 @@
 
 </body>
 </html>
-
