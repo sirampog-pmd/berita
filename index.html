@@ -261,7 +261,7 @@
         <a href="#galeri">Galeri Berita</a>
       </nav>
 		<div id="authArea" style="display:flex;align-items:center;gap:10px;">
-		  <button class="btn btn-outline" id="loginTrigger">Login</button>
+		  <button class="btn btn-outline" id="loginTrigger" hidden>Login</button>
 		  <button class="btn btn-primary" id="openAddTop"><span>＋</span> Tambah Berita</button>
 		</div>
     </div>
@@ -534,8 +534,10 @@
 	  // Tampilkan / sembunyikan tombol edit & hapus
 	  const editBtn = document.getElementById('editArticleBtn');
 	  const deleteBtn = document.getElementById('deleteArticleBtn');
+	  const loginBtn = document.getElementById('loginTrigger');
 	  if (editBtn) editBtn.hidden = !isLoggedIn();
 	  if (deleteBtn) deleteBtn.hidden = !isLoggedIn();
+	  if (loginBtn) loginBtn.hidden = !isLoggedIn();	
 	}
 
 	async function handleLogin(e) {
